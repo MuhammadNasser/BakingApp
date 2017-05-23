@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/textViewQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="0dp"
+        android:paddingEnd="0dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="0dp"
+        android:paddingStart="15dp"
+        android:paddingTop="10dp"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:text="1.5" />
+
+    <TextView
+        android:id="@+id/textViewMeasure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/textViewQuantity"
+        android:layout_toRightOf="@+id/textViewQuantity"
+        android:paddingBottom="0dp"
+        android:paddingEnd="30dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="30dp"
+        android:paddingStart="5dp"
+        android:paddingTop="10dp"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:text="Gm" />
+
+    <TextView
+        android:id="@+id/textViewIngredient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/textViewMeasure"
+        android:layout_toRightOf="@+id/textViewMeasure"
+        android:paddingBottom="0dp"
+        android:paddingTop="10dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        tools:text="ingredient" />
+
+</RelativeLayout>

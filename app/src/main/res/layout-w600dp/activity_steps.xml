@@ -1,0 +1,39 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:divider="?android:attr/dividerHorizontal"
+    android:orientation="horizontal">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_below="@+id/toolbar"
+        android:background="@drawable/gradient_shadow_inverted" />
+
+    <FrameLayout
+        android:id="@+id/stepsContainer"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/view" />
+
+    <FrameLayout
+        android:id="@+id/stepsDetailsContainer"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/view"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_toEndOf="@+id/stepsContainer"
+        android:layout_toRightOf="@+id/stepsContainer" />
+
+</RelativeLayout>
