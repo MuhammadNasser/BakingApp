@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String KEY_RECIPE_ITEM = "recipe_item";
     ProgressBar progressBar;
     TextView textViewTitle;
-    public static boolean isTabletView = false;
+    public static boolean isTabletView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.frameLayoutTablet, recipesFragment)
                     .commit();
         } else {
+            isTabletView = false;
             fragmentManager.beginTransaction()
                     .replace(R.id.frameLayout, recipesFragment)
                     .commit();

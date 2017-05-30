@@ -42,7 +42,7 @@ public class StepsActivity extends AppCompatActivity {
 
             Bundle bundle = new Bundle();
             bundle.putSerializable(KEY_RECIPE_ITEM, recipeItem);
-            bundle.putInt("index",index);
+            bundle.putInt("index", index);
 
             StepsDetailsFragment stepsDetailsFragment = new StepsDetailsFragment();
             stepsDetailsFragment.setArguments(bundle);
@@ -50,6 +50,7 @@ public class StepsActivity extends AppCompatActivity {
                     .replace(R.id.stepsDetailsContainer, stepsDetailsFragment)
                     .commit();
         } else {
+            isTabletView = false;
             StepsFragment stepsFragment = new StepsFragment();
             fragmentManager.beginTransaction()
                     .add(R.id.stepsContainer, stepsFragment)
