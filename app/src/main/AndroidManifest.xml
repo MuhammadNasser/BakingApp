@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.udacity.android.bakingapp">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -20,6 +20,22 @@
         </activity>
         <activity android:name=".StepsActivity" />
         <activity android:name=".StepsDetailsActivity" />
+
+        <receiver
+            android:name=".widget.BakingAppWidgetProvider"
+            android:label="CollectionAppWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="me.indiandollar.apps.todoappcollectionwidget.app.ACTION_DATA_UPDATED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/baking_app_widget_provider_info" />
+        </receiver>
+
+        <service
+            android:name=".widget.WidgetRemoteViewsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

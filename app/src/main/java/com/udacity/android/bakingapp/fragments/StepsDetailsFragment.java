@@ -1,8 +1,6 @@
 package com.udacity.android.bakingapp.fragments;
 
-import android.content.res.Configuration;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,7 +9,6 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -36,7 +33,6 @@ import com.udacity.android.bakingapp.model.Recipe;
 import com.udacity.android.bakingapp.model.Step;
 
 import static com.udacity.android.bakingapp.MainActivity.KEY_RECIPE_ITEM;
-import static com.udacity.android.bakingapp.MainActivity.isTabletView;
 
 /**
  * Created by Muhammad on 5/20/2017
@@ -47,7 +43,7 @@ public class StepsDetailsFragment extends Fragment implements ExoPlayer.EventLis
     private static final String TAG = StepsDetailsFragment.class.getSimpleName();
 
     private SimpleExoPlayer exoPlayer;
-    private SimpleExoPlayerView playerView;
+    private SimpleExoPlayerView exoPlayerView;
     private MediaSessionCompat mediaSession;
     private PlaybackStateCompat.Builder stateBuilder;
 
@@ -65,8 +61,7 @@ public class StepsDetailsFragment extends Fragment implements ExoPlayer.EventLis
             stepItem = recipeItem.getSteps().get(index);
         }
 
-        playerView = (SimpleExoPlayerView) view.findViewById(R.id.playerView);
-        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.linearLayout);
+        exoPlayerView = (SimpleExoPlayerView) view.findViewById(R.id.playerView);
         TextView textViewName = (TextView) view.findViewById(R.id.textViewName);
         TextView textViewDescription = (TextView) view.findViewById(R.id.textViewDescription);
 
@@ -77,12 +72,6 @@ public class StepsDetailsFragment extends Fragment implements ExoPlayer.EventLis
             initializePlayer(Uri.parse(stepItem.getVideoURL()));
         }
 
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && !isTabletView) {
-
-            playerView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
-            playerView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-            linearLayout.setVisibility(View.GONE);
-        }
         return view;
     }
 
@@ -109,7 +98,7 @@ public class StepsDetailsFragment extends Fragment implements ExoPlayer.EventLis
             TrackSelector trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
             exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
-            playerView.setPlayer(exoPlayer);
+            exoPlayerView.setPlayer(exoPlayer);
             exoPlayer.addListener(this);
             String userAgent = Util.getUserAgent(getContext(), "StepsDetailsFragment");
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(

@@ -1,20 +1,16 @@
-package com.udacity.android.bakingapp.fragments;
+package com.udacity.android.bakingapp.widget;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.widget.RemoteViews;
+import android.widget.RemoteViewsService.RemoteViewsFactory;
 
-import com.udacity.android.bakingapp.MainActivity;
 import com.udacity.android.bakingapp.R;
-import com.udacity.android.bakingapp.adapters.RecipesAdapter;
+import com.udacity.android.bakingapp.model.Ingredient;
 import com.udacity.android.bakingapp.model.Recipe;
 
 import org.json.JSONArray;
@@ -30,32 +26,92 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import static com.udacity.android.bakingapp.MainActivity.isTabletView;
+import static com.udacity.android.bakingapp.MainActivity.KEY_RECIPE_ITEM;
+import static com.udacity.android.bakingapp.fragments.RecipesFragment.recipes;
 
 
-public class RecipesFragment extends Fragment {
+public class WidgetRemoteViewsFactory implements RemoteViewsFactory {
+    private Context context;
 
-    public static ArrayList<Recipe> recipes = new ArrayList<>();
-    private RecyclerView recyclerView;
-    private MainActivity activity;
+    public WidgetRemoteViewsFactory(Context context) {
+        this.context = context;
+    }
 
-    public RecipesFragment() {
+
+    @Override
+    public void onCreate() {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_recipes, container, false);
-        activity = (MainActivity) getActivity();
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+    public void onDataSetChanged() {
         new RecipesAsyncTask().execute();
-        return view;
+    }
+
+    @Override
+    public void onDestroy() {
+    }
+
+    @Override
+    public int getCount() {
+        return recipes.size();
+    }
+
+    @Override
+    public RemoteViews getViewAt(int position) {
+
+        Recipe recipe = recipes.get(position);
+
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget_provider);
+
+        try {
+            views.setImageViewBitmap(R.id.imageView, BitmapFactory.decodeStream(new URL(recipe.getImage()).
+                    openConnection().getInputStream()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        views.setTextViewText(R.id.textViewName, recipe.getName());
+        views.setTextViewText(R.id.textViewServings, context.getString(R.string.servings) + ": " + recipe.getServings());
+
+        ArrayList<Ingredient> ingredients = recipe.getIngredients();
+
+        for (int i = 0; i < ingredients.size(); i++) {
+            RemoteViews ingredientViews = new RemoteViews(context.getPackageName(), R.layout.item_ingredient);
+            ingredientViews.setTextViewText(R.id.textViewQuantity, ingredients.get(i).getQuantity() + "");
+            ingredientViews.setTextViewText(R.id.textViewMeasure, ingredients.get(i).getMeasure());
+            ingredientViews.setTextViewText(R.id.textViewIngredient, ingredients.get(i).getIngredient());
+            views.addView(R.id.linearLayoutIngredients, ingredientViews);
+        }
+
+        Intent intent = new Intent();
+        intent.putExtra(KEY_RECIPE_ITEM, recipe);
+        views.setOnClickFillInIntent(R.id.relativeLayout, intent);
+        return views;
+    }
+
+    @Override
+    public RemoteViews getLoadingView() {
+        return null;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 2;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return true;
     }
 
     private class RecipesAsyncTask extends AsyncTask<String, Void, ArrayList<Recipe>> {
 
-        private final String LOG_TAG = RecipesAsyncTask.class.getCanonicalName();
+        private final String LOG_TAG = WidgetRemoteViewsFactory.class.getCanonicalName();
 
         /**
          * {@link java.lang.reflect.Constructor}
@@ -66,7 +122,6 @@ public class RecipesFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            activity.isLoading(true);
         }
 
         @Override
@@ -115,7 +170,7 @@ public class RecipesFragment extends Fragment {
                 }
             }
             try {
-                return getRecipesDataFromJson(recipesJsonStr);
+                return getrecipesDataFromJson(recipesJsonStr);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -131,7 +186,7 @@ public class RecipesFragment extends Fragment {
          * @return ArrayList of Recipe objects
          * @throws JSONException throws JSONException
          */
-        private ArrayList<Recipe> getRecipesDataFromJson(String recipesJsonStr) throws JSONException {
+        private ArrayList<Recipe> getrecipesDataFromJson(String recipesJsonStr) throws JSONException {
 
             JSONArray resultsArray = new JSONArray(recipesJsonStr);
 
@@ -152,31 +207,15 @@ public class RecipesFragment extends Fragment {
          * @throws MalformedURLException throws MalformedURLException
          */
         private URL getApiUrl() throws MalformedURLException {
-            final String API_BASE_URL = activity.getString(R.string.URL);
+            final String API_BASE_URL = context.getString(R.string.URL);
             Uri builtUri;
             builtUri = Uri.parse(API_BASE_URL).buildUpon()
                     .build();
             return new URL(builtUri.toString());
         }
 
-        @Override
-        protected void onPostExecute(ArrayList<Recipe> recipes) {
-            activity.isLoading(false);
-            if (recipes != null) {
-                //setting recyclerView layout and adapter.
-                StaggeredGridLayoutManager layoutManager1;
-                if (isTabletView) {
-                    layoutManager1 = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-                } else {
-                    layoutManager1 = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
-                }
-                layoutManager1.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
-                recyclerView.setLayoutManager(layoutManager1);
-                recyclerView.setHasFixedSize(false);
-                recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-                recyclerView.setAdapter(new RecipesAdapter(activity, recyclerView, recipes));
-            }
-        }
     }
+
+
 }

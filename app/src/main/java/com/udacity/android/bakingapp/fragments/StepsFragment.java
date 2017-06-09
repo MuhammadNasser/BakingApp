@@ -9,11 +9,10 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.udacity.android.bakingapp.R;
 import com.udacity.android.bakingapp.StepsActivity;
+import com.udacity.android.bakingapp.adapters.IngredientAdapter;
 import com.udacity.android.bakingapp.adapters.StepsAdapter;
 import com.udacity.android.bakingapp.model.Ingredient;
 import com.udacity.android.bakingapp.model.Recipe;
@@ -27,8 +26,8 @@ import java.util.ArrayList;
 
 public class StepsFragment extends Fragment {
 
-    private LinearLayout linearLayoutIngredients;
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerViewIngredients;
+    private RecyclerView recyclerViewSteps;
 
     StepsActivity activity;
     Recipe recipeItem;
@@ -40,15 +39,15 @@ public class StepsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_steps, container, false);
 
-        linearLayoutIngredients = (LinearLayout) view.findViewById(R.id.linearLayoutIngredients);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewSteps);
+        recyclerViewIngredients = (RecyclerView) view.findViewById(R.id.recyclerViewIngredients);
+        recyclerViewSteps = (RecyclerView) view.findViewById(R.id.recyclerViewSteps);
 
         activity = (StepsActivity) getActivity();
         recipeItem = activity.recipeItem;
         ingredients = recipeItem.getIngredients();
         steps = recipeItem.getSteps();
 
-        setIngredientsView(ingredients, inflater);
+        setIngredientsView(ingredients);
         setStepsView(steps);
 
 
@@ -57,31 +56,25 @@ public class StepsFragment extends Fragment {
     }
 
 
-    private void setIngredientsView(ArrayList<Ingredient> ingredients, LayoutInflater inflater) {
+    private void setIngredientsView(ArrayList<Ingredient> ingredients) {
         if (ingredients != null) {
-            for (int i = 0; i < ingredients.size(); i++) {
-                Ingredient ingredient = ingredients.get(i);
-                View ingredientItem = inflater.inflate(R.layout.item_ingredient, null);
-                linearLayoutIngredients.addView(ingredientItem);
+            StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+            layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+            recyclerViewIngredients.setLayoutManager(layoutManager);
+            recyclerViewIngredients.setHasFixedSize(false);
+            recyclerViewIngredients.setItemAnimator(new DefaultItemAnimator());
 
-                TextView textViewQuantity = (TextView) ingredientItem.findViewById(R.id.textViewQuantity);
-                TextView textViewMeasure = (TextView) ingredientItem.findViewById(R.id.textViewMeasure);
-                TextView textViewIngredient = (TextView) ingredientItem.findViewById(R.id.textViewIngredient);
-
-                textViewIngredient.setText(ingredient.getIngredient());
-                textViewMeasure.setText(ingredient.getMeasure());
-                textViewQuantity.setText(String.valueOf(ingredient.getQuantity()));
-            }
+            recyclerViewIngredients.setAdapter(new IngredientAdapter(activity, ingredients));
         }
     }
 
     private void setStepsView(ArrayList<Step> steps) {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(false);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewSteps.setLayoutManager(layoutManager);
+        recyclerViewSteps.setHasFixedSize(false);
+        recyclerViewSteps.setItemAnimator(new DefaultItemAnimator());
 
-        recyclerView.setAdapter(new StepsAdapter(activity, steps,recipeItem));
+        recyclerViewSteps.setAdapter(new StepsAdapter(activity, steps, recipeItem));
     }
 }
