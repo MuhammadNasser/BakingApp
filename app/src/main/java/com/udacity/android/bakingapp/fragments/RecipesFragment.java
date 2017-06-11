@@ -32,6 +32,9 @@ import java.util.ArrayList;
 
 import static com.udacity.android.bakingapp.MainActivity.isTabletView;
 
+/**
+ * Created by Muhammad on 5/13/2017
+ */
 
 public class RecipesFragment extends Fragment {
 

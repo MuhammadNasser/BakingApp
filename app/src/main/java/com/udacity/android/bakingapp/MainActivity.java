@@ -10,6 +10,10 @@ import android.widget.TextView;
 
 import com.udacity.android.bakingapp.fragments.RecipesFragment;
 
+/**
+ * Created by Muhammad on 5/13/2017
+ */
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String KEY_RECIPE_ITEM = "recipe_item";
@@ -25,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         FragmentManager fragmentManager = getSupportFragmentManager();
         RecipesFragment recipesFragment = new RecipesFragment();
+
         if (findViewById(R.id.frameLayoutTablet) != null) {
             isTabletView = true;
             fragmentManager.beginTransaction()

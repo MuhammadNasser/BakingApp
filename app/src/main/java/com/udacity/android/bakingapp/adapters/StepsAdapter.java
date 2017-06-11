@@ -108,7 +108,7 @@ public class StepsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 if (isTabletView) {
                     FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(KEY_RECIPE_ITEM, recipeItem);
+                    bundle.putParcelable(KEY_RECIPE_ITEM, recipeItem);
                     bundle.putInt("index", step.getId());
 
                     StepsDetailsFragment stepsDetailsFragment = new StepsDetailsFragment();

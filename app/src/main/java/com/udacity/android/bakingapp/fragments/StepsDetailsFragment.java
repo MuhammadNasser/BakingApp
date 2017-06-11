@@ -54,7 +54,7 @@ public class StepsDetailsFragment extends Fragment implements ExoPlayer.EventLis
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_steps_details, container, false);
 
-        Recipe recipeItem = (Recipe) getArguments().getSerializable(KEY_RECIPE_ITEM);
+        Recipe recipeItem = getArguments().getParcelable(KEY_RECIPE_ITEM);
         int index = getArguments().getInt("index", 0);
         Step stepItem = null;
         if (recipeItem != null) {

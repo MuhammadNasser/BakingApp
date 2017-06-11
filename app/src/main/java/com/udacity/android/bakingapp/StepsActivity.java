@@ -29,7 +29,7 @@ public class StepsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_steps);
 
-        recipeItem = (Recipe) getIntent().getSerializableExtra(KEY_RECIPE_ITEM);
+        recipeItem = getIntent().getParcelableExtra(KEY_RECIPE_ITEM);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         if (findViewById(R.id.stepsDetailsContainer) != null) {
@@ -41,7 +41,7 @@ public class StepsActivity extends AppCompatActivity {
                     .commit();
 
             Bundle bundle = new Bundle();
-            bundle.putSerializable(KEY_RECIPE_ITEM, recipeItem);
+            bundle.putParcelable(KEY_RECIPE_ITEM, recipeItem);
             bundle.putInt("index", index);
 
             StepsDetailsFragment stepsDetailsFragment = new StepsDetailsFragment();

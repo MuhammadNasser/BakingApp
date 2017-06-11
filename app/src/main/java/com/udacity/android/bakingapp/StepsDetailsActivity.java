@@ -17,6 +17,7 @@ import com.udacity.android.bakingapp.model.Step;
 import java.util.ArrayList;
 
 import static com.udacity.android.bakingapp.MainActivity.KEY_RECIPE_ITEM;
+import static com.udacity.android.bakingapp.fragments.RecipesFragment.recipes;
 
 /**
  * Created by Muhammad on 5/20/2017
@@ -42,7 +43,7 @@ public class StepsDetailsActivity extends AppCompatActivity implements View.OnCl
 
         Intent intent = getIntent();
         index = intent.getIntExtra("index", 0);
-        recipeItem = (Recipe) intent.getSerializableExtra(KEY_RECIPE_ITEM);
+        recipeItem = recipes.get(index);
         steps = recipeItem.getSteps();
         name = recipeItem.getName();
 
@@ -50,7 +51,7 @@ public class StepsDetailsActivity extends AppCompatActivity implements View.OnCl
         textViewPrevious = (TextView) findViewById(R.id.textViewPrevious);
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable(KEY_RECIPE_ITEM, recipeItem);
+        bundle.putParcelable(KEY_RECIPE_ITEM, recipeItem);
         bundle.putInt("index", index);
 
         stepsDetailsFragment = new StepsDetailsFragment();
@@ -80,7 +81,7 @@ public class StepsDetailsActivity extends AppCompatActivity implements View.OnCl
                 textViewPrevious.setVisibility(View.VISIBLE);
 
                 bundle = new Bundle();
-                bundle.putSerializable(KEY_RECIPE_ITEM, recipeItem);
+                bundle.putParcelable(KEY_RECIPE_ITEM, recipeItem);
                 bundle.putInt("index", index);
 
                 stepsDetailsFragment = new StepsDetailsFragment();
@@ -97,7 +98,7 @@ public class StepsDetailsActivity extends AppCompatActivity implements View.OnCl
                 textViewPrevious.setVisibility(View.VISIBLE);
 
                 bundle = new Bundle();
-                bundle.putSerializable(KEY_RECIPE_ITEM, recipeItem);
+                bundle.putParcelable(KEY_RECIPE_ITEM, recipeItem);
                 bundle.putInt("index", index);
 
                 stepsDetailsFragment = new StepsDetailsFragment();

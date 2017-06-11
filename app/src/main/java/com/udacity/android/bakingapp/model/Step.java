@@ -1,11 +1,17 @@
 package com.udacity.android.bakingapp.model;
 
-import org.json.JSONException;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONObject;
 
-import java.io.Serializable;
+/**
+ * Created by Muhammad on 5/15/2017
+ * * Creates a Step object.
+ * The Parcelable is generated to transfer object by Intents.
+ */
 
-public class Step implements Serializable {
+public class Step implements Parcelable {
 
     private int id;
     private String shortDescription;
@@ -14,17 +20,23 @@ public class Step implements Serializable {
     private String thumbnailURL;
 
 
-    public Step(JSONObject stepJason) {
-        try {
-            this.id = stepJason.getInt("id");
-            this.shortDescription = stepJason.optString("shortDescription");
-            this.description = stepJason.optString("description");
-            this.videoURL = stepJason.optString("videoURL");
-            this.thumbnailURL = stepJason.getString("thumbnailURL");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    /**
+     * Constructor for a Step object it's fill data in Strings from JSONObject.
+     */
+
+    Step(JSONObject stepJason) {
+        this.id = stepJason.optInt("id");
+        this.shortDescription = stepJason.optString("shortDescription");
+        this.description = stepJason.optString("description");
+        this.videoURL = stepJason.optString("videoURL");
+        this.thumbnailURL = stepJason.optString("thumbnailURL");
     }
+
+    /**
+     * Gets the data that's added in Strings.
+     *
+     * @return Strings data
+     */
 
     public int getId() {
         return id;
@@ -44,6 +56,42 @@ public class Step implements Serializable {
 
     public String getThumbnailURL() {
         return thumbnailURL;
+    }
+
+
+
+    private Step(Parcel in) {
+        id = in.readInt();
+        shortDescription = in.readString();
+        description = in.readString();
+        videoURL = in.readString();
+        thumbnailURL = in.readString();
+    }
+
+    public static final Creator<Step> CREATOR = new Creator<Step>() {
+        @Override
+        public Step createFromParcel(Parcel in) {
+            return new Step(in);
+        }
+
+        @Override
+        public Step[] newArray(int size) {
+            return new Step[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(shortDescription);
+        parcel.writeString(description);
+        parcel.writeString(videoURL);
+        parcel.writeString(thumbnailURL);
     }
 }
 
