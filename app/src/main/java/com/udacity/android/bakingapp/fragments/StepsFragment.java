@@ -20,14 +20,19 @@ import com.udacity.android.bakingapp.model.Step;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Muhammad on 5/15/2017
  */
 
 public class StepsFragment extends Fragment {
 
-    private RecyclerView recyclerViewIngredients;
-    private RecyclerView recyclerViewSteps;
+    @BindView(R.id.recyclerViewIngredients)
+    RecyclerView recyclerViewIngredients;
+    @BindView(R.id.recyclerViewSteps)
+    RecyclerView recyclerViewSteps;
 
     StepsActivity activity;
     Recipe recipeItem;
@@ -39,10 +44,9 @@ public class StepsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_steps, container, false);
 
-        recyclerViewIngredients = (RecyclerView) view.findViewById(R.id.recyclerViewIngredients);
-        recyclerViewSteps = (RecyclerView) view.findViewById(R.id.recyclerViewSteps);
-
         activity = (StepsActivity) getActivity();
+        ButterKnife.bind(this, view);
+
         recipeItem = activity.recipeItem;
         ingredients = recipeItem.getIngredients();
         steps = recipeItem.getSteps();

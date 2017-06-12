@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import com.udacity.android.bakingapp.fragments.RecipesFragment;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Muhammad on 5/13/2017
  */
@@ -17,16 +20,20 @@ import com.udacity.android.bakingapp.fragments.RecipesFragment;
 public class MainActivity extends AppCompatActivity {
 
     public static final String KEY_RECIPE_ITEM = "recipe_item";
+
+    @BindView(R.id.progressBar)
     ProgressBar progressBar;
+    @BindView(R.id.tv_title)
     TextView textViewTitle;
+
     public static boolean isTabletView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         FragmentManager fragmentManager = getSupportFragmentManager();
         RecipesFragment recipesFragment = new RecipesFragment();
 
@@ -49,8 +56,6 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolBar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolBar);
-
-        textViewTitle = (TextView) findViewById(R.id.tv_title);
 
         setActivityTitle(R.string.app_name);
     }

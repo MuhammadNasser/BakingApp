@@ -30,6 +30,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.udacity.android.bakingapp.MainActivity.isTabletView;
 
 /**
@@ -39,7 +42,9 @@ import static com.udacity.android.bakingapp.MainActivity.isTabletView;
 public class RecipesFragment extends Fragment {
 
     public static ArrayList<Recipe> recipes = new ArrayList<>();
-    private RecyclerView recyclerView;
+
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
     private MainActivity activity;
 
     public RecipesFragment() {
@@ -50,8 +55,7 @@ public class RecipesFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_recipes, container, false);
         activity = (MainActivity) getActivity();
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        ButterKnife.bind(this, view);
         new RecipesAsyncTask().execute();
         return view;
     }

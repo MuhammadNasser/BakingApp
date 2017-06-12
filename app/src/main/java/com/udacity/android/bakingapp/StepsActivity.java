@@ -11,6 +11,9 @@ import com.udacity.android.bakingapp.fragments.StepsDetailsFragment;
 import com.udacity.android.bakingapp.fragments.StepsFragment;
 import com.udacity.android.bakingapp.model.Recipe;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.udacity.android.bakingapp.MainActivity.KEY_RECIPE_ITEM;
 import static com.udacity.android.bakingapp.MainActivity.isTabletView;
 
@@ -20,7 +23,9 @@ import static com.udacity.android.bakingapp.MainActivity.isTabletView;
 
 public class StepsActivity extends AppCompatActivity {
 
-    private TextView textViewTitle;
+    @BindView(R.id.tv_title)
+    TextView textViewTitle;
+
     public Recipe recipeItem;
     public int index;
 
@@ -28,6 +33,7 @@ public class StepsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_steps);
+        ButterKnife.bind(this);
 
         recipeItem = getIntent().getParcelableExtra(KEY_RECIPE_ITEM);
 
@@ -64,8 +70,6 @@ public class StepsActivity extends AppCompatActivity {
 
         Toolbar toolBar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolBar);
-
-        textViewTitle = (TextView) findViewById(R.id.tv_title);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

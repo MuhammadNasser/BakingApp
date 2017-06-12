@@ -16,6 +16,9 @@ import com.udacity.android.bakingapp.model.Step;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.udacity.android.bakingapp.MainActivity.KEY_RECIPE_ITEM;
 import static com.udacity.android.bakingapp.fragments.RecipesFragment.recipes;
 
@@ -25,9 +28,13 @@ import static com.udacity.android.bakingapp.fragments.RecipesFragment.recipes;
 
 public class StepsDetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView textViewNext;
-    private TextView textViewPrevious;
-    private TextView textViewTitle;
+    @BindView(R.id.textViewNext)
+    TextView textViewNext;
+    @BindView(R.id.textViewPrevious)
+    TextView textViewPrevious;
+    @BindView(R.id.tv_title)
+    TextView textViewTitle;
+
     private ArrayList<Step> steps;
     private Recipe recipeItem;
     private int index;
@@ -40,15 +47,14 @@ public class StepsDetailsActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_steps_details);
+        ButterKnife.bind(this);
 
         Intent intent = getIntent();
         index = intent.getIntExtra("index", 0);
-        recipeItem = recipes.get(index);
+
+        recipeItem = intent.getParcelableExtra(KEY_RECIPE_ITEM);
         steps = recipeItem.getSteps();
         name = recipeItem.getName();
-
-        textViewNext = (TextView) findViewById(R.id.textViewNext);
-        textViewPrevious = (TextView) findViewById(R.id.textViewPrevious);
 
         Bundle bundle = new Bundle();
         bundle.putParcelable(KEY_RECIPE_ITEM, recipeItem);
@@ -118,7 +124,6 @@ public class StepsDetailsActivity extends AppCompatActivity implements View.OnCl
         Toolbar toolBar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolBar);
 
-        textViewTitle = (TextView) findViewById(R.id.tv_title);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

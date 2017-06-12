@@ -17,10 +17,10 @@ import java.util.ArrayList;
 public class Recipe implements Parcelable {
 
     private String name;
-    private ArrayList<Ingredient> ingredients;
-    private ArrayList<Step> steps;
     private String servings;
     private String image;
+    private ArrayList<Ingredient> ingredients;
+    private ArrayList<Step> steps;
 
     /**
      * Constructor for a Recipe object it's fill data in Strings from JSONObject.

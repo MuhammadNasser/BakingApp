@@ -32,6 +32,9 @@ import com.udacity.android.bakingapp.R;
 import com.udacity.android.bakingapp.model.Recipe;
 import com.udacity.android.bakingapp.model.Step;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.udacity.android.bakingapp.MainActivity.KEY_RECIPE_ITEM;
 
 /**
@@ -42,8 +45,15 @@ public class StepsDetailsFragment extends Fragment implements ExoPlayer.EventLis
 
     private static final String TAG = StepsDetailsFragment.class.getSimpleName();
 
+    @BindView(R.id.textViewName)
+    TextView textViewName;
+    @BindView(R.id.textViewDescription)
+    TextView textViewDescription;
+
+    @BindView(R.id.playerView)
+    SimpleExoPlayerView exoPlayerView;
+
     private SimpleExoPlayer exoPlayer;
-    private SimpleExoPlayerView exoPlayerView;
     private MediaSessionCompat mediaSession;
     private PlaybackStateCompat.Builder stateBuilder;
 
@@ -53,6 +63,7 @@ public class StepsDetailsFragment extends Fragment implements ExoPlayer.EventLis
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_steps_details, container, false);
+        ButterKnife.bind(this, view);
 
         Recipe recipeItem = getArguments().getParcelable(KEY_RECIPE_ITEM);
         int index = getArguments().getInt("index", 0);
@@ -60,11 +71,6 @@ public class StepsDetailsFragment extends Fragment implements ExoPlayer.EventLis
         if (recipeItem != null) {
             stepItem = recipeItem.getSteps().get(index);
         }
-
-        exoPlayerView = (SimpleExoPlayerView) view.findViewById(R.id.playerView);
-        TextView textViewName = (TextView) view.findViewById(R.id.textViewName);
-        TextView textViewDescription = (TextView) view.findViewById(R.id.textViewDescription);
-
         if (stepItem != null) {
             textViewName.setText(stepItem.getShortDescription());
             textViewDescription.setText(stepItem.getDescription());
@@ -125,6 +131,7 @@ public class StepsDetailsFragment extends Fragment implements ExoPlayer.EventLis
     public void onPause() {
         super.onPause();
         exoPlayer.setPlayWhenReady(false);
+        releasePlayer();
         mediaSession.setActive(false);
     }
 
@@ -132,13 +139,6 @@ public class StepsDetailsFragment extends Fragment implements ExoPlayer.EventLis
     public void onResume() {
         super.onResume();
         mediaSession.setActive(true);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        releasePlayer();
-        mediaSession.setActive(false);
     }
 
     @Override
