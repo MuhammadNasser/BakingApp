@@ -77,6 +77,7 @@ public class WidgetRemoteViewsFactory implements RemoteViewsFactory {
 
         ArrayList<Ingredient> ingredients = recipe.getIngredients();
 
+        views.removeAllViews(R.id.linearLayoutIngredients);
         for (int i = 0; i < ingredients.size(); i++) {
             RemoteViews ingredientViews = new RemoteViews(context.getPackageName(), R.layout.item_ingredient);
             views.addView(R.id.linearLayoutIngredients, ingredientViews);
